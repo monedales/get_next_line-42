@@ -6,7 +6,7 @@
 /*   By: maria-ol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 12:36:09 by maria-ol          #+#    #+#             */
-/*   Updated: 2025/08/25 17:28:40 by maria-ol         ###   ########.fr       */
+/*   Updated: 2025/08/26 13:58:18 by maria-ol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[is2])
 	{
 		nstr[is1 + is2] = s2[is2];
-		is1++;
 		is2++;
 	}
 	nstr[is1 + is2] = '\0';
@@ -127,7 +126,7 @@ char	*ft_strchr(const char *str, int chr)
 			return ((char *)&str[count]);
 		count++;
 	}
-	if (str[count] == '\0')
+	if (urchr == '\0')
 		return ((char *)&str[count]);
 	return (NULL);
 }
@@ -154,12 +153,13 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	total_len = ft_strlen(s);
 	if (total_len <= start)
 		return (ft_strdup(""));
-	if (len > ft_strlen(&s[start]))
-		len = ft_strlen(&s[start]);
+	if (len > total_len - start)
+		len = total_len - start;
 	sub = malloc(sizeof(char) * (len + 1));
 	if (!sub)
 		return (NULL);
-	while (s[count])
+	count = 0;
+	while (count < len)
 	{
 		sub[count] = s[start + count];
 		count++;
