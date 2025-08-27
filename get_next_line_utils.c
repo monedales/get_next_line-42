@@ -6,7 +6,7 @@
 /*   By: maria-ol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 12:36:09 by maria-ol          #+#    #+#             */
-/*   Updated: 2025/08/26 13:58:18 by maria-ol         ###   ########.fr       */
+/*   Updated: 2025/08/27 16:21:23 by maria-ol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		nstr[is1] = s1[is1];
 		is1++;
 	}
+	is2 = 0;
 	while (s2[is2])
 	{
 		nstr[is1 + is2] = s2[is2];
@@ -76,7 +77,7 @@ char	*ft_strjoin(char *s1, char *s2)
  * @return Returns a pointer to the duplicated string or NULL if is not
  * enough memory available.
  */
-char	*ft_strdup(const char *str)
+char	*ft_strdup(char *str)
 {
 	char	*new_str;
 	size_t	count;
@@ -142,7 +143,7 @@ char	*ft_strchr(const char *str, int chr)
  * @param len The maximum length of the substring.
  * @return The substring. NULL if the allocation fails.
  */
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char *s, unsigned int start, size_t len)
 {
 	char	*sub;
 	size_t	total_len;
