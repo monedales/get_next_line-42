@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maria-ol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/22 12:36:11 by maria-ol          #+#    #+#             */
-/*   Updated: 2025/08/27 22:28:49 by maria-ol         ###   ########.fr       */
+/*   Created: 2025/08/27 19:41:12 by maria-ol          #+#    #+#             */
+/*   Updated: 2025/08/27 22:17:36 by maria-ol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 /**
  * @brief Safely deallocates memory and sets pointer to NULL.
@@ -45,27 +45,32 @@ static void	ft_memdel(void **address_ptr)
  * @param fd The file descriptor to read from.
  * @return The updated string containing all concatenated data, or NULL on error.
  */
-static char	*read_and_concat_to_scraps(char *scraps, char *buffer, int fd)
+static void	read_and_concat_to_scraps(char **scraps, char *buffer, int fd)
 {
 	char		*temp;
 	ssize_t		bytes_read;
 
 	bytes_read = 1;
-	while (!(ft_strchr(scraps, '\n')) && bytes_read > 0)
+	while (!(ft_strchr(*scraps, '\n')) && bytes_read > 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
-			return (NULL);
+		{
+			ft_memdel((void **)scraps);
+			return ;
+		}
 		if (bytes_read == 0)
 			break ;
 		buffer[bytes_read] = '\0';
-		temp = ft_strjoin(scraps, buffer);
+		temp = ft_strjoin(*scraps, buffer);
 		if (!temp)
-			return (NULL);
-		ft_memdel((void **)&scraps);
-		scraps = temp;
+		{
+			ft_memdel((void **)scraps);
+			return ;
+		}
+		ft_memdel((void **)scraps);
+		*scraps = temp;
 	}
-	return (scraps);
 }
 
 /**
@@ -86,6 +91,8 @@ static char	*extract_line(char *scraps)
 	char	*new_line;
 	size_t	len;
 
+	if (!scraps)
+		return (NULL);
 	line = ft_strchr(scraps, '\n');
 	if (line)
 	{
@@ -109,26 +116,27 @@ static char	*extract_line(char *scraps)
  * @return A new string with leftover data for subsequent calls, 
  *         or NULL if no data remains or allocation fails.
  */
-static char	*extract_leftovers(char *scraps)
+static void	extract_leftovers(char **scraps)
 {
 	char	*leftovers;
 	char	*pos_new_line;
 	size_t	i_start;
 
-	pos_new_line = ft_strchr(scraps, '\n');
+	if (!scraps || !*scraps)
+		return ;
+	pos_new_line = ft_strchr(*scraps, '\n');
 	if (!pos_new_line)
 	{
-		ft_memdel((void **)&scraps);
-		return (NULL);
+		ft_memdel((void **)scraps);
+		return ;
 	}
 	else
 	{
-		i_start = (pos_new_line - scraps) + 1;
-		leftovers = ft_substr(scraps, i_start,
-				ft_strlen(scraps) - i_start);
-		ft_memdel((void **)&scraps);
+		i_start = (pos_new_line - *scraps) + 1;
+		leftovers = ft_substr(*scraps, i_start, ft_strlen(*scraps) - i_start);
+		ft_memdel((void **)scraps);
 	}
-	return (leftovers);
+	*scraps = leftovers;
 }
 
 /**
@@ -145,71 +153,29 @@ static char	*extract_leftovers(char *scraps)
  */
 char	*get_next_line(int fd)
 {
-	static char	*scraps = NULL;
+	static char	*scraps[FD_MAX] = {NULL};
 	char		*buffer;
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd >= FD_MAX || BUFFER_SIZE <= 0)
 	{
-		if (scraps)
-			ft_memdel((void **)&scraps);
+		if (scraps[fd])
+			ft_memdel((void **)&scraps[fd]);
 		return (NULL);
 	}
-	if (!scraps)
-		scraps = ft_strdup("");
+	if (!scraps[fd])
+		scraps[fd] = ft_strdup("");
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (NULL);
-	scraps = read_and_concat_to_scraps(scraps, buffer, fd);
+	read_and_concat_to_scraps(&scraps[fd], buffer, fd);
 	ft_memdel((void **)&buffer);
-	if (!scraps || scraps[0] == '\0')
+	if (!scraps[fd] || scraps[fd][0] == '\0')
 	{
-		ft_memdel((void **)&scraps);
+		ft_memdel((void **)&scraps[fd]);
 		return (NULL);
 	}
-	line = extract_line(scraps);
-	scraps = extract_leftovers(scraps);
+	line = extract_line(scraps[fd]);
+	extract_leftovers(&scraps[fd]);
 	return (line);
 }
-// static void	gnl_cleanup();
-// #include "get_next_line.h"
-// int	main(int argc, char **argv)
-// {
-//     int		fd;
-//     char	*line;
-
-//     if (argc < 2)
-// 	{
-// 		// Testa stdin se não passar arquivo
-// 		fd = 0;
-// 		printf("Digite algo (Ctrl+D para terminar):\n");
-// 	}
-// 	else
-// 	{
-// 		fd = open(argv[1], O_RDONLY);
-// 		if (fd < 0)
-// 		{
-// 			perror("open");
-// 			return (1);
-// 		}
-// 	}
-//     while ((line = get_next_line(fd)) != NULL)
-//     {
-//         printf("%s", line);
-//         free(line);
-//     }
-//     gnl_cleanup(fd);
-
-//     if (fd != 0)
-// 		close(fd);
-//     return (0);
-// }
-// static void	gnl_cleanup()
-// {
-//     static char	*scraps = NULL;
-//     if (scraps)
-//     {
-//         free(scraps);
-//         scraps = NULL;
-//     }
-// }
