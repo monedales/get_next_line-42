@@ -6,7 +6,7 @@
 /*   By: maria-ol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 19:41:12 by maria-ol          #+#    #+#             */
-/*   Updated: 2025/08/27 22:17:36 by maria-ol         ###   ########.fr       */
+/*   Updated: 2025/08/29 17:37:09 by maria-ol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,3 +179,40 @@ char	*get_next_line(int fd)
 	extract_leftovers(&scraps[fd]);
 	return (line);
 }
+// #include "get_next_line_bonus.h"
+// int	main(int argc, char **argv)
+// {
+// 		# include <stdio.h>
+// 	int		fd1, fd2;
+// 	char	*line1 = NULL;
+// 	char	*line2 = NULL;
+
+// 	if (argc < 3)
+// 	{
+// 		printf("Uso: %s <arquivo1> <arquivo2>\n", argv[0]);
+// 		return (1);
+// 	}
+// 	fd1 = open(argv[1], O_RDONLY);
+// 	fd2 = open(argv[2], O_RDONLY);
+// 	while (1)
+// 	{
+// 		line1 = get_next_line(fd1);
+// 		line2 = get_next_line(fd2);
+// 		if (!line1 && !line2)
+// 			break ;
+// 		if (line1)
+// 		{
+// 			printf("[fd1] %s", line1);
+// 			free(line1);
+// 		}
+// 		if (line2)
+// 		{
+// 			printf("[fd2] %s", line2);
+// 			free(line2);
+// 		}
+// 	}
+
+// 	close(fd1);
+// 	close(fd2);
+// 	return (0);
+// }

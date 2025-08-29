@@ -6,7 +6,7 @@
 /*   By: maria-ol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 12:36:11 by maria-ol          #+#    #+#             */
-/*   Updated: 2025/08/27 22:28:49 by maria-ol         ###   ########.fr       */
+/*   Updated: 2025/08/29 17:37:25 by maria-ol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ static char	*read_and_concat_to_scraps(char *scraps, char *buffer, int fd)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
+		{
+			ft_memdel((void **)&scraps);
 			return (NULL);
+		}
 		if (bytes_read == 0)
 			break ;
 		buffer[bytes_read] = '\0';
@@ -173,6 +176,7 @@ char	*get_next_line(int fd)
 }
 // static void	gnl_cleanup();
 // #include "get_next_line.h"
+// # include <stdio.h>
 // int	main(int argc, char **argv)
 // {
 //     int		fd;

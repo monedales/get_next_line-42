@@ -6,7 +6,7 @@
 /*   By: maria-ol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 12:36:14 by maria-ol          #+#    #+#             */
-/*   Updated: 2025/08/27 19:40:43 by maria-ol         ###   ########.fr       */
+/*   Updated: 2025/08/29 16:41:49 by maria-ol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,13 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/types.h>
-# include <stdio.h>
 
 # ifndef FD_MAX
 #  define FD_MAX 1024
 # endif
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 32
+#  define BUFFER_SIZE 42
 # endif
 
 char	*get_next_line(int fd);
