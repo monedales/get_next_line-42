@@ -6,7 +6,7 @@
 /*   By: maria-ol <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 19:41:12 by maria-ol          #+#    #+#             */
-/*   Updated: 2025/08/29 17:37:09 by maria-ol         ###   ########.fr       */
+/*   Updated: 2025/09/10 20:14:34 by maria-ol         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ char	*get_next_line(int fd)
 	extract_leftovers(&scraps[fd]);
 	return (line);
 }
-// #include "get_next_line_bonus.h"
+
 // int	main(int argc, char **argv)
 // {
 // 		# include <stdio.h>
